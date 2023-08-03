@@ -44,7 +44,7 @@ class PostController extends Controller
                 'commentCount' => $commentCount,
                 'repostCount' => $repostCount,
                 'images' => $images,
-                'createAt' => $createdAt,
+                'createdAt' => $createdAt,
             ];
 
             array_push($result, $p);
