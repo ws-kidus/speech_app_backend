@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,11 +22,21 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // public routes
-    Route::post('/socialAuth', [AuthController::class, 'socialAuth']);
-    Route::post('/signIn', [AuthController::class, 'signIn']);
-    Route::post('/signUp', [AuthController::class, 'signUp']);
+Route::post('/socialAuth', [AuthController::class, 'socialAuth']);
+Route::post('/signIn', [AuthController::class, 'signIn']);
+Route::post('/signUp', [AuthController::class, 'signUp']);
 
 // private routes
+Route::group([
+    'middleware' => 'auth:sanctum',
+], function () {
+    // user
+    Route::prefix('user')->group(function () {
+        Route::get('/', [UserController::class, 'fetchUser']);
+    });
+
+});
+
 Route::prefix('posts')->group(function () {
     Route::get('/', [PostController::class, 'fetchAllPosts']);
     Route::post('/create', [PostController::class, 'createPost']);
