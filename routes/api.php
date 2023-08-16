@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
 
 /*
@@ -21,6 +22,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // public routes
+    Route::post('/socialAuth', [AuthController::class, 'socialAuth']);
+    Route::post('/signIn', [AuthController::class, 'signIn']);
+    Route::post('/signUp', [AuthController::class, 'signUp']);
 
 // private routes
 Route::prefix('posts')->group(function () {
