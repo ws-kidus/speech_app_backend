@@ -14,14 +14,18 @@ class UserController extends Controller
         $id = $user->id;
         $name = $user->name;
         $email = $user->email;
+        $phone = $user->phone;
         $photoUrl = $user->photoUrl;
+        $backgroundUrl = $user->backgroundUrl;
         $createdAt = $user->created_at;
 
         $result = [
             'id' => $id,
             'name' => $name,
             'email' => $email,
+            'phone'=> $phone,
             'photoUrl' => $photoUrl,
+            'backgroundUrl'=>$backgroundUrl,
             'createdAt' => $createdAt,
         ];
 

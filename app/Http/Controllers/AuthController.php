@@ -9,11 +9,16 @@ class AuthController extends Controller
 {
     // signUp
     public function signUp(Request $request)
-    {}
+    {   $type = 1;
+        // check for user is already signup
+    }
 
     // signIn
     public function signIn(Request $request)
-    {}
+    {
+         $type = 1;
+        // prevent usage of signIn if user already social Auth
+    }
 
     // socialAuth
     public function socialAuth(Request $request)
@@ -22,6 +27,7 @@ class AuthController extends Controller
         $email = $request['email'];
         $password = $request['password'];
         $photoUrl = $request['photoUrl'];
+        $type = $request['type'];
 
         $user = User::where('email', $email)->first();
 
@@ -31,6 +37,7 @@ class AuthController extends Controller
                 'email' => $email,
                 'password' => $password,
                 'photoUrl' => $photoUrl,
+                'type'=>$type,
             ]);
         }
 
