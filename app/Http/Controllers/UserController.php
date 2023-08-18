@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class UserController extends Controller
@@ -23,9 +24,9 @@ class UserController extends Controller
             'id' => $id,
             'name' => $name,
             'email' => $email,
-            'phone'=> $phone,
+            'phone' => $phone,
             'photoUrl' => $photoUrl,
-            'backgroundUrl'=>$backgroundUrl,
+            'backgroundUrl' => $backgroundUrl,
             'createdAt' => $createdAt,
         ];
 
@@ -36,6 +37,59 @@ class UserController extends Controller
 
         return Response($response, 200);
     }
-    public function updateUserPhoto()
-    {}
+
+    public function updateUserDetails(Request $request)
+    {
+        $user = auth()->user();
+
+        $name = $request['name'];
+        $phone = $request['phone'];
+
+        if ($name) {
+            User::where('id', $user->id)->update(['name' => $name]);
+            $response = [
+                'status' => 'OK',
+                'message' => 'successfully changed name',
+            ];
+
+            return Response($response, 200);
+        }
+
+        if ($phone) {
+            $response = [
+                'status' => 'OK',
+                'message' => 'successfully changed name',
+            ];
+
+            return Response($response, 200);
+        }
+    }
+
+    public function updateUserBackgroundImage(Request $request)
+    {
+        $user = auth()->user();
+
+        $request->validate([
+            'image' => 'required',
+        ]);
+
+        $image = $request['image'];
+        $imageName = time() . $image->getClientOriginalName();
+        $imagePath = public_path() . '/uploads';
+
+        $image->move($imagePath, $imageName);
+
+        $link = '/uploads/' . $imageName;
+
+        User::where('id', $user->id)->update(['backgroundUrl' => $link]);
+
+        $response = [
+            'status' => 'OK',
+            'message' => 'successfully changed background image',
+        ];
+
+        return Response($response, 200);
+
+    }
+
 }

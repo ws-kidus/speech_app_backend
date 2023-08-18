@@ -33,6 +33,8 @@ Route::group([
     // user
     Route::prefix('user')->group(function () {
         Route::get('/', [UserController::class, 'fetchUser']);
+        Route::post('/changeBackgroundImage', [UserController::class, 'updateUserBackgroundImage']);
+        Route::put('/updateUserDetails', [UserController::class, 'updateUserDetails']);
     });
 
 });
