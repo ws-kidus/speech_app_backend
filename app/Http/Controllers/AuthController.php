@@ -78,7 +78,7 @@ class AuthController extends Controller
             return Response($response, 400);
         }
 
-        if (!Hash::check($request['password'], $user->password)) {
+        if (Hash::check($request['password'], $user->password)) {
             $response = [
                 'status' => 'ERROR',
                 'message' => 'please check your email address or password',
