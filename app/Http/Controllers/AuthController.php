@@ -110,13 +110,23 @@ class AuthController extends Controller
 
         $user = User::where('email', $email)->first();
 
-        $photoUrl = null;
-        if ($request['photoUrl']) {
-            $imageName = $this->storeSocialImage($name, $request['photoUrl']);
-            $photoUrl = '/uploads/' . $imageName;
+        if ($user && $user->type != $type) {
+            $message = $user->type == 2 ? "google" : "facebook";
+
+            $response = [
+                'status' => 'ERROR',
+                'message' => 'User sign up using ' . $message . ', please use that',
+            ];
+            return Response($response, 400);
         }
 
         if (!$user) {
+            $photoUrl = null;
+            if ($request['photoUrl']) {
+                $imageName = $this->storeSocialImage($name, $request['photoUrl']);
+                $photoUrl = '/uploads/' . $imageName;
+            }
+
             $user = User::create([
                 'name' => $name,
                 'email' => $email,
@@ -150,7 +160,7 @@ class AuthController extends Controller
 
         // Use basename() function to return
         // the base name of file
-        $file_name = time().$name;
+        $file_name = time() . $name;
 
         // Save file into file location
         $save_file_loc = $dir . $file_name;

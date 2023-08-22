@@ -34,6 +34,7 @@ Route::group([
     Route::prefix('user')->group(function () {
         Route::get('/', [UserController::class, 'fetchUser']);
         Route::post('/changeBackgroundImage', [UserController::class, 'updateUserBackgroundImage']);
+        Route::post('/changeProfileImage', [UserController::class, 'updateUserProfileImage']);
         Route::put('/updateUserDetails', [UserController::class, 'updateUserDetails']);
     });
 

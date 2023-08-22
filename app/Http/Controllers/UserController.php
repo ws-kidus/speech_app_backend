@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\File;
 
 class UserController extends Controller
 {
@@ -73,8 +74,10 @@ class UserController extends Controller
             'image' => 'required',
         ]);
 
+        $this->deleteImageIfExists($user->backgroundUrl);
+
         $image = $request['image'];
-        $imageName = time() . $image->getClientOriginalName();
+        $imageName = time() . $user->name;
         $imagePath = public_path() . '/uploads';
 
         $image->move($imagePath, $imageName);
@@ -90,6 +93,43 @@ class UserController extends Controller
 
         return Response($response, 200);
 
+    }
+
+    public function updateUserProfileImage(Request $request){
+        $user = auth()->user();
+
+        $request->validate([
+            'image' => 'required',
+        ]);
+
+        $this->deleteImageIfExists($user->photoUrl);
+
+        $image = $request['image'];
+        $imageName = time() . $user->name;
+        $imagePath = public_path() . '/uploads';
+
+        $image->move($imagePath, $imageName);
+
+        $link = '/uploads/' . $imageName;
+
+        User::where('id', $user->id)->update(['photoUrl' => $link]);
+
+        $response = [
+            'status' => 'OK',
+            'message' => 'successfully changed profile image',
+        ];
+
+        return Response($response, 200);
+    }
+
+    public function deleteImageIfExists($imagePath)
+    {
+        if ($imagePath) {
+            $path =  public_path() .$imagePath;
+            if (File::exists($path)) {
+                File::delete($path);
+            }
+        }
     }
 
 }
